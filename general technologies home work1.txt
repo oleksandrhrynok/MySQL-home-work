@@ -1,0 +1,72 @@
+create database library;
+
+use library;
+
+create table readers (
+id int, 
+first_name varchar(255),
+surname varchar(255),
+age int,
+activity varchar(255),
+number_of_books int,
+primary key (id)
+);
+
+replace into readers values (1,'Andrew','Nikolaev',25,'act',30),
+(2,'Oleg','Olegov',35,'act',20),
+(3,'Alex','Maximov',18,'act',35),
+(1,'Maxim','Maximov',27,'inact',10);
+
+select * from readers 
+where number_of_books > 0 and activity='inact';
+
+create table library_staff ( 
+id int, 
+first_name varchar(255),
+surname varchar(255),
+age int,
+activity varchar(255),
+salary int,
+number_of_reading int,
+primary key (id)
+);
+
+replace into library_staff values(3,'Oleg','Ivanov',43,'act',5000,5),
+(1,'Alex','Alexeev',20,'act',4000,4),
+(2,'Evgeniy','Valeev',25,'inact',3000,3);
+
+create table service_staff (
+id int,  
+first_name varchar(255),
+surname varchar(255),
+age int,
+activity varchar(255),
+salary int,
+primary key (id)
+);
+
+replace into service_staff values (1,'Andrew','Olegov',25,'act',3000),
+(2,'Oleg','Nikolaev',35,'act',2000),
+(3,'Alex','Valieev',18,'act',3500),
+(1,'Maxim','Petrov',27,'inact',1000);
+
+select id, first_name, surname, age, activity, salary, number_of_reading 
+from library_staff 
+where salary > 2000 
+union 
+select id, first_name, surname, age, activity, salary, NULL 
+from service_staff 
+where salary > 2000 
+order by salary ASC;
+
+select id, first_name, surname, age, activity, 0, 0,number_of_books
+from readers 
+where activity='act'
+union
+select id, first_name, surname, age, activity, salary, number_of_reading,0
+from library_staff 
+where activity='act' 
+union 
+select id, first_name, surname, age, activity, salary, 0, 0
+from service_staff 
+where activity='act';
